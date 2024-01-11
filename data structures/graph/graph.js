@@ -69,7 +69,7 @@ class Graph {
     while (queue.length) {
       const currVertex = queue.shift();
       console.log(currVertex);
-      for (let neighbour of this.adjacencyList[vertex]) {
+      for (let neighbour of this.adjacencyList[currVertex]) {
         if (!visited[neighbour]) {
           visited[neighbour] = true;
           queue.push(neighbour);
@@ -90,7 +90,8 @@ graph.addEdge("C", "B");
 graph.addEdge("D", "B");
 graph.addEdge("C", "D");
 graph.addEdge("A", "D");
-graph.print();
+// graph.print();
 console.log(" done ");
 graph.removeVertex("D");
-graph.print();
+// graph.print();
+graph.BFS("A");
