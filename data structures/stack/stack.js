@@ -13,7 +13,8 @@ class Stack {
 
   remove() {
     const removed = this.items[this.top];
-    delete this.items[--this.top];
+    delete this.items[this.top];
+    this.top--;
     this.size--;
     return removed;
   }

@@ -21,6 +21,8 @@ class HashTableCollision {
       const sameKey = bucket.find((item) => item[0] === key);
       if (sameKey) {
         sameKey[1] = value;
+      } else {
+        bucket.push([key, value]);
       }
     }
   }

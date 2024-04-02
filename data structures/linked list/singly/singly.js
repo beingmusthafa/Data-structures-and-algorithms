@@ -10,12 +10,15 @@ class LinkedList {
     this.head = null;
     this.size = 0;
   }
+
   isEmpty() {
     return this.size === 0;
   }
+
   getSize() {
     return this.size;
   }
+
   //add values to the beginning
   prepend(value) {
     const node = new Node(value);
@@ -32,11 +35,11 @@ class LinkedList {
     if (this.isEmpty()) {
       this.head = node;
     } else {
-      let prev = this.head;
-      while (prev.next) {
-        prev = prev.next;
+      let curr = this.head;
+      while (curr.next) {
+        curr = curr.next;
       }
-      prev.next = node;
+      curr.next = node;
     }
     this.size++;
   }
@@ -133,65 +136,44 @@ class LinkedList {
     }
   }
 
-  //remove with value
+  //reverse the values
   removeWithValue(value) {
-    if (this.isEmpty()) {
-      return null;
-    }
+    if (this.isEmpty()) return;
     if (this.head.value === value) {
       this.head = this.head.next;
       this.size--;
+      console.log("deleted " + value);
       return;
     }
     let prev = this.head;
     for (let i = 0; i < this.size - 1; i++) {
-      let final = prev.next;
-      if (final.value === value) {
-        prev.next = final.next;
+      let curr = prev.next;
+      if (curr.value === value) {
+        prev.next = curr.next;
         this.size--;
+        console.log("deleted " + value);
         return;
       }
-      prev = prev.next;
+      prev = curr;
     }
-    return null;
   }
 
-  //reverse the values
-  reverse() {
-    if (this.size < 2) return;
-    let prev = null;
-    let current = this.head;
-    while (current) {
-      let next = current.next;
-      current.next = prev;
-      prev = current;
-      current = next;
-    }
-    this.head = prev;
-  }
-
-  //remove duplicate values
   removeDuplicates() {
-    if (this.size < 2) {
-      return;
-    }
-    let set = new Set();
-    let prev = this.head;
-    set.add(prev.value);
-    let current = prev.next;
-    do {
-      if (set.has(current.value)) {
-        let next = current.next;
-        prev.next = next;
-        if (next) next.prev = prev;
+    if (this.size < 2) return;
+    let valueSet = new Set();
+    let prev = null;
+    let curr = this.head;
+    while (curr) {
+      if (valueSet.has(curr.value)) {
+        prev.next = curr.next;
+        curr = curr.next;
         this.size--;
-        current = next;
       } else {
-        set.add(current.value);
-        prev = prev.next;
-        current = current.next;
+        valueSet.add(curr.value);
+        prev = curr;
+        curr = curr.next;
       }
-    } while (prev && current);
+    }
   }
 
   //create from array
@@ -201,15 +183,15 @@ class LinkedList {
   print() {
     if (this.isEmpty()) {
       console.log("List is empty");
-    } else {
-      let current = this.head;
-      let valueList = "";
-      while (current) {
-        valueList += `${current.value} || `;
-        current = current.next;
-      }
-      console.log(valueList);
+      return;
     }
+    let values = "";
+    let curr = this.head;
+    while (curr) {
+      values += curr.value + " | ";
+      curr = curr.next;
+    }
+    console.log(values);
   }
 }
 
