@@ -122,7 +122,7 @@ class BinarySearchTree {
     }
     return (
       this.isValidBST(node.left, min, node.value) &&
-      (node.right, node.value, max)
+      this.isValidBST(node.right, node.value, max)
     );
   }
 
