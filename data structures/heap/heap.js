@@ -27,18 +27,14 @@ class MaxHeap {
       let left = 2 * index + 1,
         right = 2 * index + 2,
         swap = null;
-      if (left < length) {
-        if (this.heap[left] > this.heap[index]) {
-          swap = left;
-        }
+      if (left < length && this.heap[left] > this.heap[index]) {
+        swap = left;
       }
-      if (right < length) {
-        if (
-          (swap !== null && this.heap[right] > this.heap[left]) ||
-          (swap === null && this.heap[right] > this.heap[index])
-        ) {
-          swap = right;
-        }
+      if (
+        right < length &&
+        this.heap[right] > (swap !== null ? this.heap[swap] : this.heap[index])
+      ) {
+        swap = right;
       }
       if (swap === null) break;
       this.swap(index, swap);
