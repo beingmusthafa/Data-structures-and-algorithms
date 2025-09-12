@@ -1,22 +1,30 @@
 function mergeSort(nums) {
-  if (nums.length < 2) return nums;
+  if (nums.length === 1) return nums;
   const mid = Math.floor(nums.length / 2);
-  const leftArray = nums.slice(0, mid);
-  const rightArray = nums.slice(mid);
-  return merge(mergeSort(leftArray), mergeSort(rightArray));
+  const leftArr = nums.slice(0, mid);
+  const rightArr = nums.slice(mid);
+  return merge(mergeSort(leftArr), mergeSort(rightArr));
 }
-function merge(leftArray, rightArray) {
-  let sortedArray = [];
-  while (leftArray.length && rightArray.length) {
-    if (leftArray[0] <= rightArray[0]) {
-      sortedArray.push(leftArray.shift());
+
+function merge(leftArr, rightArr) {
+  const sortedArr = [];
+  let i = 0,
+    j = 0;
+  while (i < leftArr.length && j < rightArr.length) {
+    if (leftArr[i] <= rightArr[j]) {
+      sortedArr.push(leftArr[i]);
+      i++;
     } else {
-      sortedArray.push(rightArray.shift());
+      sortedArr.push(rightArr[j]);
+      j++;
     }
   }
-  return [...sortedArray, ...leftArray, ...rightArray];
+  while (i < leftArr.length) sortedArr.push(leftArr[i++]);
+  while (j < rightArr.length) sortedArr.push(rightArr[j++]);
+  return sortedArr;
 }
+
 console.log(
-  mergeSort([10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6, -7])
+  mergeSort([10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6, -7]),
 );
 //O(n log n)
