@@ -85,29 +85,27 @@ class BinarySearchTree {
   }
 
   delete(value) {
-    this.deleteNode(this.root, value);
+    this.deleteNode(value, this.root);
   }
 
-  deleteNode(root, value) {
-    if (!root) {
-      return null;
-    }
-    if (value < root.value) {
-      root.left = this.deleteNode(root.left, value);
-    } else if (value > root.value) {
-      root.right = this.deleteNode(root.right, value);
+  deleteNode(value, node = this.root) {
+    if (!node) return null;
+    //searching for the value throught recursion
+    if (value > node.value) {
+      node.right = this.deleteNode(value, node.right);
+    } else if (value < node.value) {
+      node.left = this.deleteNode(value, node.left);
     } else {
-      if (!root.left && !root.right) {
-        return null;
-      } else if (!root.left) {
-        return root.right;
-      } else if (!root.right) {
-        return root.left;
-      }
-      root.value = this.min(root.right);
-      root.right = this.deleteNode(root.right, root.value);
+      //found it!
+      if (!node.left && !node.right) return null;
+      else if (!node.left) return node.right;
+      else if (!node.right) return node.left;
+      //in case both leafs exist replace with inorder successor and recurse the process till down
+      node.value = this.findMin(node.right);
+      node.right = this.deleteNode(node.value, node.right);
     }
-    return root;
+    //necessary changes are made, so return the node subtree to be assigned to previous recursion branch to complete the tree
+    return node;
   }
 
   isValidBST(node = this.root, min = null, max = null) {
@@ -143,6 +141,22 @@ class BinarySearchTree {
     }
     return closest;
   }
+
+  print(node = this.root, prefix = "", isLeft = true) {
+    if (!node) return;
+
+    // Right side first (so tree looks correct)
+    this.print(node.right, prefix + (isLeft ? "│   " : "    "), false);
+
+    // Print current node
+    console.log(
+      prefix +
+        (isLeft ? "└── " : "┌── ") +
+        node.value +
+        (node.count > 1 ? `(${node.count})` : ""),
+    ); // Left side
+    this.print(node.left, prefix + (isLeft ? "    " : "│   "), true);
+  }
 }
 
 const bst = new BinarySearchTree();
@@ -154,3 +168,4 @@ bst.insert(11);
 bst.insert(15);
 bst.insert(9);
 console.log(bst.findClosest(15));
+bst.print();
