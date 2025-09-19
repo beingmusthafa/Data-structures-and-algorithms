@@ -151,6 +151,20 @@ class BinarySearchTree {
     return 1 + Math.max(leftHeight, rightHeight);
   }
 
+  checkIfBalanced() {
+    function helper(n) {
+      if (!n) return 0;
+      const rightH = helper(n.right);
+      if (rightH === -1) return -1;
+      const leftH = helper(n.left);
+      if (leftH === -1) return -1;
+      const diff = Math.abs(leftH - rightH);
+      if (diff <= 1) return 1 + Math.max(leftH, rightH);
+      return -1;
+    }
+    return helper(this.root) !== -1;
+  }
+
   print(node = this.root, prefix = "", isLeft = true) {
     if (!node) return;
 
@@ -179,3 +193,4 @@ bst.insert(9);
 console.log(bst.findClosest(15));
 bst.print();
 console.log("height: ", bst.getHeight());
+console.log("balanced: ", bst.checkIfBalanced());
