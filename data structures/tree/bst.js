@@ -142,6 +142,15 @@ class BinarySearchTree {
     return closest;
   }
 
+  getHeight(node = this.root) {
+    if (!node) return 0;
+    let leftHeight = 0;
+    if (node.left) leftHeight = this.getHeight(node.left);
+    let rightHeight = 0;
+    if (node.right) rightHeight = this.getHeight(node.right);
+    return 1 + Math.max(leftHeight, rightHeight);
+  }
+
   print(node = this.root, prefix = "", isLeft = true) {
     if (!node) return;
 
@@ -169,3 +178,4 @@ bst.insert(15);
 bst.insert(9);
 console.log(bst.findClosest(15));
 bst.print();
+console.log("height: ", bst.getHeight());
