@@ -1,6 +1,6 @@
 class HashTable {
   constructor(size) {
-    this.items = new Array(size);
+    this.items = new Array(size).fill(null);
     this.tableSize = size;
   }
 
@@ -14,7 +14,7 @@ class HashTable {
 
   insertValue(key, value) {
     const index = this.hash(key);
-    if (this.items[index]) {
+    if (this.items[index] && this.items[index] !== "_") {
       console.log("collision in index ", index);
       //handle collision thorugh linear probe
       this.handleCollisionLinearProbe(index, key, value);
@@ -42,7 +42,12 @@ class HashTable {
     let i = 0;
     for (i = 0; i < this.tableSize; i++) {
       const probeIndex = (index + i) % this.tableSize;
-      if (this.items[probeIndex]?.key === key) {
+      if (!this.items[probeIndex]) {
+        console.log(`key '${key}' not found in table`);
+        return;
+      }
+      if (this.items[probeIndex] === "_") continue;
+      if (this.items[probeIndex].key === key) {
         element = this.items[probeIndex];
         break;
       }
@@ -55,13 +60,24 @@ class HashTable {
     console.log(`found item : ${element.key} - ${element.value} at ${i}`);
   }
 
+  delete(key) {
+    for (let i = 0; i < this.tableSize; i++) {
+      if (!this.items[i] || this.items[i] === "_") continue;
+      if (this.items[i].key === key) {
+        this.items[i] = "_";
+        console.log("deleted key : ", key);
+        return;
+      }
+    }
+  }
+
   resize() {
     const oldTable = this.items;
-    this.items = new Array(this.tableSize * 2);
+    this.items = new Array(this.tableSize * 2).fill(null);
 
     //re-insert all previous values. why? because hash function logic changes when table size changes. so older values become inconsistent
     for (const item of oldTable) {
-      if (!item) continue;
+      if (!item || item === "_") continue;
       this.insertValue(item.key, item.value);
     }
   }
