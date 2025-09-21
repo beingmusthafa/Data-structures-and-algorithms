@@ -54,6 +54,17 @@ class HashTable {
     }
     console.log(`found item : ${element.key} - ${element.value} at ${i}`);
   }
+
+  resize() {
+    const oldTable = this.items;
+    this.items = new Array(this.tableSize * 2);
+
+    //re-insert all previous values. why? because hash function logic changes when table size changes. so older values become inconsistent
+    for (const item of oldTable) {
+      if (!item) continue;
+      this.insertValue(item.key, item.value);
+    }
+  }
 }
 
 const ht = new HashTable(20);
