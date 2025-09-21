@@ -1,4 +1,6 @@
 class HashTable {
+  TOMBSTONE = "_";
+
   constructor(size) {
     this.items = new Array(size).fill(null);
     this.tableSize = size;
@@ -14,7 +16,7 @@ class HashTable {
 
   insertValue(key, value) {
     const index = this.hash(key);
-    if (!this.items[index] || this.items[index] === "_") {
+    if (!this.items[index] || this.items[index] === this.TOMBSTONE) {
       this.items[index] = { key, value };
       console.log(`inserted [${key} : ${value}] at index ${index}`);
       return;
@@ -32,7 +34,10 @@ class HashTable {
   handleCollisionLinearProbe(index, key, value) {
     for (let i = 0; i < this.tableSize; i++) {
       const probeIndex = (index + i) % this.tableSize;
-      if (!this.items[probeIndex] || this.items[probeIndex] === "_") {
+      if (
+        !this.items[probeIndex] ||
+        this.items[probeIndex] === this.TOMBSTONE
+      ) {
         this.items[probeIndex] = { key, value };
         console.log(`LP : inserted ${key} : ${value} at ${probeIndex}`);
         return;
@@ -57,7 +62,7 @@ class HashTable {
         console.log(`key '${key}' not found in table`);
         return;
       }
-      if (this.items[probeIndex] === "_") continue;
+      if (this.items[probeIndex] === this.TOMBSTONE) continue;
       if (this.items[probeIndex].key === key) {
         element = this.items[probeIndex];
         break;
@@ -81,9 +86,9 @@ class HashTable {
         console.log("key to delete not found :", key);
         return;
       }
-      if (this.items[probeIndex] === "_") continue;
+      if (this.items[probeIndex] === this.TOMBSTONE) continue;
       if (this.items[probeIndex].key === key) {
-        this.items[probeIndex] = "_";
+        this.items[probeIndex] = this.TOMBSTONE;
         console.log("deleted key : ", key);
         return;
       }
@@ -96,7 +101,7 @@ class HashTable {
     this.tableSize *= 2;
     //re-insert all previous values. why? because hash function logic changes when table size changes. so older values become inconsistent
     for (const item of oldTable) {
-      if (!item || item === "_") continue;
+      if (!item || item === this.TOMBSTONE) continue;
       this.insertValue(item.key, item.value);
     }
   }
