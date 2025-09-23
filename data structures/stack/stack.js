@@ -12,9 +12,10 @@ class Stack {
   }
 
   remove() {
+    if (this.top === 0) return null;
+    this.top--;
     const removed = this.items[this.top];
     delete this.items[this.top];
-    this.top--;
     this.size--;
     return removed;
   }
